@@ -11,6 +11,12 @@
 
 @implementation CalculatorBrain
 
+- (void)dealloc
+{
+	[waitingOperation release];
+	[super dealloc];
+}
+
 - (void)setOperand:(double)aDouble
 {
 	operand = aDouble;

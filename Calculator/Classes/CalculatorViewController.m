@@ -8,7 +8,18 @@
 
 #import "CalculatorViewController.h"
 
+@interface CalculatorViewController()
+@property (readonly) CalculatorBrain *brain;
+@end
+
+
 @implementation CalculatorViewController
+
+- (void)dealloc
+{
+	[brain release];
+	[super dealloc];
+}
 
 - (CalculatorBrain *)brain
 {
@@ -18,15 +29,15 @@
 
 - (IBAction)digitPressed:(UIButton *)sender
 {
-	NSString *digit = [[sender titleLabel] text];
+	NSString *digit = sender.titleLabel.text;
 	
 	if (userIsInTheMiddleOfTypingANumber)
 	{
-		[display setText:[[display text] stringByAppendingString:digit]];
+		display.text = [display.text stringByAppendingString:digit];
 	}
 	else
 	{
-		[display setText:digit];
+		display.text = digit;
 		userIsInTheMiddleOfTypingANumber = YES;
 	}
 
@@ -36,28 +47,28 @@
 {
 	if (userIsInTheMiddleOfTypingANumber)
 	{
-		[[self brain] setOperand:[[display text] doubleValue]];
+		[self.brain setOperand:[display.text doubleValue]];
 		userIsInTheMiddleOfTypingANumber = NO;
 	}
-	NSString *operation = [[sender titleLabel] text];
-	double result = [[self brain] performOperation:operation];
-	[display setText:[NSString stringWithFormat:@"%g", result]];
+	NSString *operation = sender.titleLabel.text;
+	double result = [self.brain performOperation:operation];
+	display.text = [NSString stringWithFormat:@"%g", result];
 }
 
 - (IBAction)floatingPointPressed:(UIButton *)sender
 {
-	NSRange range = [[display text] rangeOfString:@"."];
+	NSRange range = [display.text rangeOfString:@"."];
 	
 	if (userIsInTheMiddleOfTypingANumber)
 	{
 		if (range.location == NSNotFound)
 		{
-			[display setText:[[display text] stringByAppendingString:@"."]];
+			display.text = [display.text stringByAppendingString:@"."];
 		}		
 	}
 	else
 	{
-		[display setText:@"0."];
+		display.text = @"0.";
 		userIsInTheMiddleOfTypingANumber = YES;
 	}
 }
