@@ -19,6 +19,8 @@
 - (IBAction)digitPressed:(UIButton *)sender;
 - (IBAction)operationPressed:(UIButton *)sender;
 - (IBAction)floatingPointPressed:(UIButton *)sender;
+- (IBAction)variablePressed:(UIButton *)sender;
+- (IBAction)solvePressed:(UIButton *)sender;
 
 @end
 

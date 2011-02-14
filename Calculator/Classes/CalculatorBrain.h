@@ -10,13 +10,27 @@
 
 
 @interface CalculatorBrain : NSObject {
-	double operand;
-	double waitingOperand;
-	double operandInMemory;
-	NSString *waitingOperation;
+	@private
+		double operand;
+		double waitingOperand;
+		double operandInMemory;
+		NSString *waitingOperation;
+		NSMutableArray *internalExpression;
 }
 
-- (void)setOperand:(double)aDouble;
+- (void)setVariableAsOperand:(NSString *)variableName;
 - (double)performOperation:(NSString *)operation;
+
+@property (readonly) id expression;
+@property double operand;
+
++ (double)evaluteExpression:(id)anExpression
+		usingVariableValues:(NSDictionary *)variables;
+
++ (NSSet *)variablesInExpression:(id)anExpression;
++ (NSString *)descriptionOfExpression:(id)anExpression;
+
+//+ (id)propertyListForExpression:(id)anExpression;
+//+ (id)expressionForPropertyList:(id)propertyList;
 
 @end

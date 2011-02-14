@@ -47,12 +47,18 @@
 {
 	if (userIsInTheMiddleOfTypingANumber)
 	{
-		[self.brain setOperand:[display.text doubleValue]];
+		self.brain.operand = [display.text doubleValue];
 		userIsInTheMiddleOfTypingANumber = NO;
 	}
+	
 	NSString *operation = sender.titleLabel.text;
 	double result = [self.brain performOperation:operation];
-	display.text = [NSString stringWithFormat:@"%g", result];
+	
+	if ([CalculatorBrain variablesInExpression:self.brain.expression]) {
+		display.text = [CalculatorBrain descriptionOfExpression:self.brain.expression];		
+	} else {
+		display.text = [NSString stringWithFormat:@"%g", result];
+	}
 }
 
 - (IBAction)floatingPointPressed:(UIButton *)sender
@@ -71,6 +77,20 @@
 		display.text = @"0.";
 		userIsInTheMiddleOfTypingANumber = YES;
 	}
+}
+
+- (IBAction)variablePressed:(UIButton *)sender
+{
+	[self.brain setVariableAsOperand:sender.titleLabel.text];
+	display.text = [CalculatorBrain descriptionOfExpression:self.brain.expression];
+}
+
+- (IBAction)solvePressed:(UIButton *)sender
+{
+	NSDictionary *variables = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1], @"%a", [NSNumber numberWithDouble:2], @"%b", [NSNumber numberWithDouble:3], @"%c", [NSNumber numberWithDouble:4], @"%d", nil];
+	double result = [CalculatorBrain evaluteExpression:self.brain.expression
+								   usingVariableValues:variables];
+	display.text = [NSString stringWithFormat:@"%g", result];
 }
 
 @end
